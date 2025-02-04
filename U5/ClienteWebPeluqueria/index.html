@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="axios/dist/axios.min.js"></script>
+    <title> Mi tareas</title>
+</head>
+<body>
+
+    <form action="">
+        <h2>Crear Cita</h2>
+        <label for="">Fecha</label>
+        <input type="date" name="fecha" id="fecha" required/>
+        <input type="time" name="hora" id="hora"/>
+        <label for="">Cliente</label>
+        <input type="text" name="cliente" id="cliente" placeholder="cliente"/>
+        <label for="">Finalizada</label>
+        <button type="button" name="crear" onclick="crearCita()">crear</button>
+    </form>
+    <h2>lista de C</h2>
+    <table name="tabla" id="tabla">
+
+    </table>
+
+    <script>
+        function crearCita(){
+            const url='http://localhost/DWES24-25/DWES-SID/DWES2/U5/APITareas/public/tareas';
+            if(document.getElementById('fecha').value=='' ||  document.getElementById('hora').value=='' ||
+            document.getElementById('cliente').value==''){
+                alert('error campos vacios');
+            }
+            const datos = {
+                 fecha:document.getElementById('fecha').value,
+                 hora:document.getElementById('hora').value,
+                 descripcion:document.getElementById('cliente').value,
+            }
+
+            axios.post(url,datos)
+            .then(response=>{
+                const respuesta = response.data;
+                alert(`Tarea con id ${respuesta.tarea.id} creada`);
+                cargarTareas();
+                 document.getElementById('fecha').value=''; 
+                 document.getElementById('hora').value='';
+                 document.getElementById('cliente').value=''; 
+
+            })
+            .catch(error=>{
+                console.error(error.response.data);
+                alert(`Error:${error.response.data} Estado:${error.response.status}`);
+
+            })
+
+
+        }
+
+        // function finalizarTarea(id){
+        //     const url=`http://localhost/DWES24-25/DWES-SID/DWES2/U5/APITareas/public/tareas/${id}`;
+        //     datos={
+        //         finalizada:true
+        //     }
+        //     axios.put(url,datos)
+        //     .then(response=>
+        //         {
+        //             alert(response.data.mensaje)
+        //             cargarTareas();
+        //         }
+        //     )
+                
+        //     .catch(error=>{
+        //         console.error(error.response.data);
+        //         alert(`Error:${error.response.data} Estado:${error.response.status}`);
+        //     }
+        //     );
+
+        // }
+        // function finalizarTarea(id){
+        //     const url=`http://localhost/DWES24-25/DWES-SID/DWES2/U5/APITareas/public/tareas/${id}`;
+        //     datos={
+        //         finalizada:true
+        //     }
+        //     axios.put(url,datos)
+        //     .then(response=>
+        //         {
+        //             alert(response.data.mensaje)
+        //             cargarTareas();
+        //         }
+        //     )
+                
+        //     .catch(error=>{
+        //         console.error(error.response.data);
+        //         alert(`Error:${error.response.data} Estado:${error.response.status}`);
+        //     }
+        //     );
+
+        // }
+        // function borrarTarea(id){
+        //     const url=`http://localhost/DWES24-25/DWES-SID/DWES2/U5/APITareas/public/tareas/${id}`;
+        //     if(confirm(`¿Seguro que quieres borrar la tarea ${id}?`)){
+          
+        //     axios.delete(url)
+        //     .then(response=>
+        //         {
+        //             alert(response.data)
+        //             cargarTareas();
+        //         }
+        //     )
+                
+        //     .catch(error=>{
+        //         console.error(error.response.data);
+        //         alert(`Error:${error.response.data} Estado:${error.response.status}`);
+        //     }
+        //     );
+        // }
+        // }
+        
+        function cargarCitas(){
+            const url='http://localhost/SID-DWES/DWES4/U5/APIPeluqueria/public/api/verCitas';
+            axios.get(url)
+            .then(
+                response=>{
+                    const citas = response.data;
+                    const tabla = document.getElementById('tabla');
+                    tabla.innerHTML='<tr><td>ID</td><td>Fecha</td><td>Hora</td><td>Cliente</td><td>finalizada</td></tr>';
+                    citas.forEach(c => {
+                        const fila =document.createElement('tr');
+                        fila.innerHTML=`<td>${t.id}</td>
+                        <td>${c.fecha}</td>
+                        <td>${c.hora}</td>
+                        <td>${c.cliente}</td>
+                        <td>${t.finalizada}</td>
+                        <td><button type="button" name="finalizar" onclick="finalizarTarea(${c.id})">Finalizar</button>
+                        <button type="button" name="borrar" onclick="borrarTarea(${c.id})">Borrar</button></td>`;
+                        tabla.appendChild(fila);
+                    });
+                }
+            )
+            .catch(error=>{
+                console.error(error.response.data);
+                alert(`Error:${error.response.data} Estado:${error.response.status}`);
+            })
+
+        }
+        window.onload(cargarCitas());
+    </script>
+    
+
+
+
+</body>
+</html>

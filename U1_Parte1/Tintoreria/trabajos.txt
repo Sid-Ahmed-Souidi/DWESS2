@@ -1,0 +1,4 @@
+15/11/2024;Sid Ahmed ;Cuero;limpieza;10
+10/11/2024;sara;Hogar;planchado/desmanchado;112
+08/11/2024;paco;Hogar;limpieza/planchado;6
+10/11/2024;sara;Hogar;planchado/desmanchado;112
