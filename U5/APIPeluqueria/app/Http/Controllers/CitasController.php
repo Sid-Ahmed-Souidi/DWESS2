@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cita;
+use App\Models\Detalle_cita;
+use App\Models\Servicio;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Exception;
 
 class CitasController extends Controller
 {
@@ -20,17 +23,72 @@ class CitasController extends Controller
         }
     }
 
+
+
+
+    
+    public function obtenerDetalle(Request $request)
+    {
+        $request->validate(
+            [
+                'id'=>'required',
+            ]
+        );
+        try {
+            
+            $cita = Cita::find($request->id);
+            $detallesCitas = $cita->detalle_citas();
+            if(sizeof($detallesCitas)==0){
+                throw new Exception('No hay ningún servicio en esta cita');
+            }
+            return $cita->detalle_citas();
+        } catch (\Throwable $th) {
+            return response()->json(['error : '.$th->getMessage()], 500);
+        }
+    }
+
+
+
+
+    public function obtenerServicios()
+    {
+        try {
+            return Servicio::all();
+        } catch (\Throwable $th) {
+            return response()->json(['error : '.$th->getMessage()], 500);
+        }
+    }
+
+
+
+
+
+
+
+     public function finalizarCita(Request $request){
+        $request->validate(
+            [
+                'id'=>'required',
+            ]
+        );
+        try {
+            $cita = Cita::find($request->id);
+            $cita->finalizada = 1;
+            $cita->save();
+
+            return response()->json(['mensaje' => 'Cita finalizada correctamente', 'cita' => $cita], 200);
+
+        } catch (\Throwable $th) {
+            return response()->json(['error : '.$th->getMessage()], 500);
+        }
+
+     }
+
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {   
-        // <input type="date" name="fecha" id="fecha" required/>
-        // <input type="time" name="hora" id="hora"/>
-        // <label for="">Cliente</label>
-        // <input type="text" name="desc" id="desc" placeholder="cliente"/>
-        // <label for="">Finalizada</label>
-        // <button type="button" name="crear" onclick="crearCita()">crear</button>
         $request->validate(
             [
                 'fecha'=>'required',
@@ -40,11 +98,10 @@ class CitasController extends Controller
         );
         try {
             //crear un objeto tarea 
-            $c = new Cita ();
+            $c = new Cita();
             $c->fecha =$request->fecha;              
             $c->hora =$request->hora;
             $c->cliente =$request->cliente;
-            $c->finalizada =0;
             if($c->save()){
                 return response()->json(['mensaje'=>'Cita Creada','cita'=>$c],201);
 
@@ -78,8 +135,30 @@ class CitasController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Cita $citas)
+    public function destroy(Request $request)
     {
-        //
+        $request->validate(
+            [
+                'id'=>'required',
+            ]
+        );  
+        $cita = Cita::find($request->id);
+        $detallesCitas = $cita->detalle_citas();
+        if(sizeof($detallesCitas)==0){
+            if($cita->delete()){
+                return response()->json(['mensaje'=>'Cita Borrada'],201);
+            }else{
+                return response()->json('Error:al borrar Cita',500);
+            }
+
+        }else{
+            return response()->json('Error:La cita tiene detalles',500);
+
+
+        }
+
+
+
+
     }
 }

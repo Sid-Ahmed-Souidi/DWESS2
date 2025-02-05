@@ -10,71 +10,160 @@
 
     <form action="">
         <h2>Crear Cita</h2>
-        <label for="">Fecha</label>
         <input type="date" name="fecha" id="fecha" required/>
         <input type="time" name="hora" id="hora"/>
-        <label for="">Cliente</label>
         <input type="text" name="cliente" id="cliente" placeholder="cliente"/>
-        <label for="">Finalizada</label>
         <button type="button" name="crear" onclick="crearCita()">crear</button>
     </form>
-    <h2>lista de C</h2>
+    <h2>lista de Citas</h2>
     <table name="tabla" id="tabla">
 
     </table>
 
+    <h2>lista de detalle</h2>
+    <table name="tabla2" id="tabla2">
+
+    </table>
+    
+    <select name="citaId" id="citaId">
+
+    </select>
+    <select name="recursoId" id="recursoId">
+
+    </select>
+    <button type="button" name="crear" onclick="crearServicio()">Añadir Servicio</button>
+
+
+
     <script>
+
+        window.onload = cargarCitas()
+        window.onload = selectCitas()
+        window.onload = selectServicios()
+
+
+          function selectCitas() {
+            const url='http://localhost/SID-DWES2/U5/APIPeluqueria/public/api/vercitas';
+                axios.get(url)
+                .then(
+                    response => {
+                        const citas = response.data
+                        const select = document.getElementById('citaId')
+                        citas.forEach(c => {
+                            const option = document.createElement('option')
+                            option.text = c.id
+                            select.appendChild(option)
+                        });
+                    }
+                )
+                .catch(
+                    error => {
+                        console.error(error.response.data)
+                        alert('Error al cargar los recursos')
+                    }
+                )
+        }
+
+        function selectServicios() {
+            const url='http://localhost/SID-DWES2/U5/APIPeluqueria/public/api/servicios';
+                axios.get(url)
+                .then(
+                    response => {
+                        const servicios = response.data
+                        const select = document.getElementById('recursoId')
+                        servicios.forEach(s => {
+                            const option = document.createElement('option')
+                            option.text = s.descripcion
+                            select.appendChild(option)
+                        });
+                    }
+                )
+                .catch(
+                    error => {
+                        console.error(error.response.data)
+                        alert('Error al cargar los recursos')
+                    }
+                )
+        }
+
+      
         function crearCita(){
-            const url='http://localhost/DWES24-25/DWES-SID/DWES2/U5/APITareas/public/tareas';
+            const url='http://localhost/SID-DWES2/U5/APIPeluqueria/public/api/citas';
             if(document.getElementById('fecha').value=='' ||  document.getElementById('hora').value=='' ||
             document.getElementById('cliente').value==''){
                 alert('error campos vacios');
             }
             const datos = {
-                 fecha:document.getElementById('fecha').value,
-                 hora:document.getElementById('hora').value,
-                 descripcion:document.getElementById('cliente').value,
+                fecha:document.getElementById('fecha').value,
+                hora:document.getElementById('hora').value,
+                cliente:document.getElementById('cliente').value,
             }
 
             axios.post(url,datos)
             .then(response=>{
                 const respuesta = response.data;
-                alert(`Tarea con id ${respuesta.tarea.id} creada`);
-                cargarTareas();
+                alert(`Cita con id ${respuesta.tarea.id} creada`);
+                cargarCitas();
                  document.getElementById('fecha').value=''; 
                  document.getElementById('hora').value='';
                  document.getElementById('cliente').value=''; 
+                 cargarCitas();
+                //  location.reload();
 
             })
             .catch(error=>{
-                console.error(error.response.data);
-                alert(`Error:${error.response.data} Estado:${error.response.status}`);
-
+                console.log('Error:'+error.response.data)
             })
 
 
         }
 
-        // function finalizarTarea(id){
-        //     const url=`http://localhost/DWES24-25/DWES-SID/DWES2/U5/APITareas/public/tareas/${id}`;
-        //     datos={
-        //         finalizada:true
-        //     }
-        //     axios.put(url,datos)
-        //     .then(response=>
-        //         {
-        //             alert(response.data.mensaje)
-        //             cargarTareas();
-        //         }
-        //     )
-                
-        //     .catch(error=>{
-        //         console.error(error.response.data);
-        //         alert(`Error:${error.response.data} Estado:${error.response.status}`);
-        //     }
-        //     );
+        function finalizarCita(id){
 
-        // }
+            const url = `http://localhost/SID-DWES2/U5/APIPeluqueria/public/api/finalizarcita`;
+            const datos = {
+                id: id
+            }
+            axios.post(url,datos)
+             .then(response=>
+                 {
+                     alert(response.data.mensaje)
+                     cargarCitas();
+                }
+             )
+                
+             .catch(error=>{
+                 console.error(error.response.data);
+             }
+         );
+
+
+         }
+
+        function borrarCita(id){
+
+            const url = `http://localhost/SID-DWES2/U5/APIPeluqueria/public/api/borrarcita`;
+            const datos = {
+                id: id
+            }
+            axios.post(url,datos)
+            .then(response=>
+                {
+                    alert(response.data.mensaje)
+                    cargarCitas();
+                }
+            )
+                
+            .catch(error=>{
+                console.error(error.response.data);
+            }
+            );
+
+
+            }
+
+
+         
         // function finalizarTarea(id){
         //     const url=`http://localhost/DWES24-25/DWES-SID/DWES2/U5/APITareas/public/tareas/${id}`;
         //     datos={
@@ -114,9 +203,50 @@
         //     );
         // }
         // }
+
+        
+        // <button type="button" name="detalle" onclick="obtenerDetalle(${c.id})">Detalle</button></td>
+
+        // function obtenerDetalle(id){
+        //     const url='http://localhost/SID-DWES2/U5/APIPeluqueria/public/api/verdetalle'+id;
+        // }
+
+        // const datos = {
+        //         id: id
+        //     }
+        //     axios.get(url,{params:datos})
+        function obtenerDetalle(id){
+            const url='http://localhost/SID-DWES2/U5/APIPeluqueria/public/api/detallecita';
+            const datos = {
+                 id: id
+             }
+         axios.get(url,{params:datos})
+            .then(
+                response=>{
+                    const detallecita = response.data;
+                    const tabla = document.getElementById('tabla2');
+                    tabla.innerHTML='<tr><td>ID</td><td>cita_id</td><td>servicio_id</td><td>precio</td></tr>';
+                    detallecita.forEach(c => {
+                        const fila =document.createElement('tr');
+                        fila.innerHTML=`<td>${c.id}</td>
+                        <td>${c.cita_id}</td>
+                        <td>${c.servicio_id}</td>
+                        <td>${c.precio}</td>`;
+                        tabla.appendChild(fila);
+                    });
+                }
+            )
+            .catch(error=>{
+                alert(`Error:${error.response.data} Estado:${error.response.status}`);
+            })
+
+        }
+
+
+
         
         function cargarCitas(){
-            const url='http://localhost/SID-DWES/DWES4/U5/APIPeluqueria/public/api/verCitas';
+            const url='http://localhost/SID-DWES2/U5/APIPeluqueria/public/api/vercitas';
             axios.get(url)
             .then(
                 response=>{
@@ -125,24 +255,28 @@
                     tabla.innerHTML='<tr><td>ID</td><td>Fecha</td><td>Hora</td><td>Cliente</td><td>finalizada</td></tr>';
                     citas.forEach(c => {
                         const fila =document.createElement('tr');
-                        fila.innerHTML=`<td>${t.id}</td>
+                        fila.innerHTML=`<td>${c.id}</td>
                         <td>${c.fecha}</td>
                         <td>${c.hora}</td>
                         <td>${c.cliente}</td>
-                        <td>${t.finalizada}</td>
-                        <td><button type="button" name="finalizar" onclick="finalizarTarea(${c.id})">Finalizar</button>
-                        <button type="button" name="borrar" onclick="borrarTarea(${c.id})">Borrar</button></td>`;
+                        <td>${c.finalizada}</td>
+                        <button type="button" name="detalle" onclick="obtenerDetalle(${c.id})">Detalle</button></td>
+                        <button type="button" name="finalizar" onclick="finalizarCita(${c.id})">finalizar</button></td>
+                        <button type="button" name="borrar" onclick="borrarCita(${c.id})">Borrar</button></td>`;
+                        
                         tabla.appendChild(fila);
                     });
                 }
             )
             .catch(error=>{
-                console.error(error.response.data);
                 alert(`Error:${error.response.data} Estado:${error.response.status}`);
             })
 
         }
-        window.onload(cargarCitas());
+        // window.onload(cargarCitas());
+        window.onload = function () {
+            cargarCitas();
+        };
     </script>
     
 
