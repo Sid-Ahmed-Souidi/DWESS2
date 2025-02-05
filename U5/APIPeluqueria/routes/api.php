@@ -10,7 +10,5 @@ Route::get('/user', function (Request $request) {
 
 
 
-// Route::get('recursos',[RecursoController::class, 'index'])->withoutMiddleware(VerifyCsrfToken::class);
 Route::get('verCitas',[CitasController::class, 'index']);
-// Route::post('crearCita',[CitasController::class, 'store']);
 
