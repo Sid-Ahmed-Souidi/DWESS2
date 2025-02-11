@@ -1,22 +1,16 @@
-//cargar libreria de Express 
-
+// Cargar librería de Express
 const express = require('express');
 
-
 //Inicializar el sistema de rutas
-
 const api = express.Router();
 
-
-//importamos el conrtrolador donde se definen llas fuinciones
-//asignadass
-
-const controlador = require('../controllers/usuarioC')
+//Importamos el controlador donde se definen las funciones asignadas
+//a las rutas
+const controlador = require('../controllers/usuarioC');
 
 //Creamos rutas
+api.post('/login',controlador.login);
+api.post('/registro',controlador.registro);
 
-api.post('/login',controlador.login)
-api.post('/registro',controlador.registro)
-
-
+//Exportamos las rutas de este fichero
 module.exports = api;
