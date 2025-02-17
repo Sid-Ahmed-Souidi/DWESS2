@@ -7,8 +7,8 @@
     <title>Document</title>
 </head>
 <body>
-    <form action="{{route('rutaInsertar')}}" method="post">
-
+    <form action="{{route('insertarP')}}" method="post">
+        @csrf
     <label for="">Fecha</label><br>
     @if(old('fecha')!=null)
     <input type="date" name="fecha" value="{{old('fecha')}}">
@@ -33,7 +33,13 @@
     @error('cliente')
     <p style="color:red;">Rellena cliente</p>
     @enderror
-    <button href="{{route('vistaCrear')}}" value="crear">crear</button>
+    <button  value="crear">crear</button>
    </form>
+
+   <div style="color:red;">
+    @if (session('mensaje')!=null)
+        {{session('mensaje')}}
+    @endif
+</div>
 </body>
 </html>

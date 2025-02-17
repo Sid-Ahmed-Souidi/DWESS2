@@ -22,21 +22,27 @@
             </tr> 
         </thead>
         <tbody>
-            <tr>
             @foreach ($prestamos as $p)
-                <th>{{$p->id}}</th>
-                <th>{{$p->fecha}}</th> 
-                <th>{{$p->libro->titulo}}</th> 
-                <th>{{$p->nombreCliente}}</th> 
-                <th>{{$p->fechaDevolucion}}</th> 
-                <th><button>Modificar</button></th>
+                <tr>
+                    <td>{{$p->id}}</td>
+                    <td>{{$p->fecha}}</td> 
+                    <td>{{$p->libro->titulo}}</td> 
+                    <td>{{$p->nombreCliente}}</td> 
+                    <td>{{$p->fechaDevolucion}}</td> 
+                    <form action="{{route('rutaModificar' ,$p->id)}}">
+                         @csrf
+                        <td><button>Modificar</button></td>
+                    </form>
+                </tr>
             @endforeach
-         </tr> 
         </tbody>
     </table>
 
 
-
-    
+    <div style="color:red;">
+        @if (session('mensaje')!=null)
+            {{session('mensaje')}}
+        @endif
+    </div>
 </body>
 </html>

@@ -13,7 +13,10 @@ Route::controller(PrestamoC::class)->group(
     function(){
         Route::get('verprestamos','verPrestamos')->name('verP');
         Route::get('vistacrear','obtenerLibros')->name('vistaCrear');
-        Route::post('vistacrear','insertar')->name('rutaInsertar');
+        Route::post('verprestamos','insertar')->name('insertarP');
+        Route::get('rutamodificar/{id}','obtenerPrestamo')->name('rutaModificar');
+        Route::post('mprestamos','modificarPrestamo')->name('modificarP');
+
 
     }
 );
