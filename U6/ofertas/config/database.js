@@ -1,12 +1,11 @@
+//CArgar dotenv para trabajar con variables .env
 const dotenv = require('dotenv');
 dotenv.config();
 
-//importa libreria de ORM 
+//Importar librería de ORM
+const sequelize = require('sequelize');
 
-const sequelize =require('sequelize');
-
-//CONFIGURAR datos de conexion con la BD;
-
+//Configurar datos de conexión con la BD;
 const configBD = new sequelize(process.env.DB_NAME,process.env.DB_USER,
     process.env.DB_PASSWORD,
     {
@@ -14,10 +13,6 @@ const configBD = new sequelize(process.env.DB_NAME,process.env.DB_USER,
         port:process.env.DB_PORT,
         dialect:process.env.DB_DIALECT,
         dialectModule:require('mysql2')
+    });
 
-
-    }
-
-)
-
-module.exports=configBD;
+module.exports = configBD;    

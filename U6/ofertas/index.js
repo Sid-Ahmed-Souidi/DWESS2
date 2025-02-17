@@ -1,36 +1,28 @@
 //Importar Aplicación app.js
 const app = require('./app')
 
-//Puerto de escucha del servidor
-
-//cArgar dotenv para trabajar con variables .env
-const dotenv = require('dotenv')
+//CArgar dotenv para trabajar con variables .env
+const dotenv = require('dotenv');
 dotenv.config();
+//Puerto de escucha del servidor
+const puerto = process.env.APP_PORT;
 
-//llamamos el puerto que esta definido en .env
-const puerto=process.env.APP_PORT;
+//Cargar configuración de BD
+const { bd, Usuario, Oferta } = require('./Models/index');
 
-//Cargar configuracion de BD
-
-const {bd ,Usuario} =require('./Models/index');
-
-
-//Conectar con la bd 
-
+//Conectar con la BD
 bd.sync(
     {
-    force:true, //Cmbiar a false cuando ek esquema de bd sea definitivo
-})
-.then(()=>{
-    console.log('BD base de datos conectada');
-    //Lanzar aplicación
-    app.listen(puerto,()=>{
-    console.log('Aplicación lanzada en http://localhost:3000')
-})
-
-
-})
-.catch((error)=>{
-    console.log('Error al conectar la BD',error);
-})
+        force: false,//¡¡ CAMBIAR A FALSE CUANDO EL ESQUEMA DEL BD SEA DEFINITIVO !!
+    })
+    .then(() => {
+        console.log('BD sincronizada');
+        //Lanzar aplicación
+        app.listen(puerto, () => {
+            console.log('Aplicación lanzada en http://localhost:3000')
+        })
+    })
+    .catch((error) => {
+        console.log('Error al conectar con la BD', error);
+    });
 

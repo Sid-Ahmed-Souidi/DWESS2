@@ -1,20 +1,23 @@
 //Importar Sequelize
-
 const {Sequelize} = require('sequelize');
-//Importar configurarcion BD 
 
+//Importar configuración BD
 const bd = require('../config/database')
 
+//Importar el modelo de Usuario
+const Usuario = require('./usuario')
+//Importar el modelo de Oferta
+const Oferta = require('./oferta')
 
-//importar el modelo de Usuario
+//Definir relaciones
+//Un usuario (tienda) puede tener 0 o muchas ofertas creadas
+Usuario.hasMany(Oferta, {foreignKey:'usuario_id'})
+//Una oferta es de un usuario
+Oferta.belongsTo(Usuario,{foreignKey:'usuario_id'})
 
-const Usuario = require('./usuario');
-
-//Definir relaziones
-
-//Exportar conexion , modelos y relaciones 
-
+//Eportar conexión, modelos y relaciones
 module.exports = {
     bd,
     Usuario,
+    Oferta
 }

@@ -1,50 +1,39 @@
-//Importar libreria de tipos de datos de sequelize
+//Importar librería de tipos de datos de sequelize
+const { DataTypes } = require('sequelize');
 
-const { DataTypes } = require('sequelize')
-
-//Importar configuracion BD
-
+//Importar configuración BD
 const bd = require('../config/database');
 
-const Usuario = bd.define('Oferta', 
-
+//DEfinimos el modelo de oferta
+const Oferta = bd.define('ofertas',
     {
         id:{
-            type:DataTypes.INTEGER,
+            type: DataTypes.INTEGER,
             autoIncrement:true,
             primaryKey:true
         },
         titulo:{
             type:DataTypes.STRING,
             allowNull:false
-
         },
         descripcion:{
             type:DataTypes.STRING,
             allowNull:false
-
         },
-        usuari_id:{
+        usuario_id:{
             type:DataTypes.INTEGER,
             allowNull:false,
             references:{
-                model:'usuarios',
+                model:'usuarios', //Nombre de la tabla
                 key:'id'
             },
-            onUpdate :'CASCADE',
-            onDelete 'RESTRICT'
-
-        },
-
-
+            onUpdate: 'CASCADE',
+            onDelete: 'RESTRICT',
+        }
     },
-
-
-
     {
-        tablename: 'usuarios',
-        timestamps: true
-    }
-);
+        //tablename:'ofertas',
+        timestamps:true
+    });
 
-module.exports = Usuario;
+    module.exports=Oferta;
