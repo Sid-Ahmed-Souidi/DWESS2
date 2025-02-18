@@ -24,7 +24,6 @@ class PrestamoC extends Controller
         return view('vistacrear', compact('libros'));
     }
 
-    
 
     function insertar(Request $r){
         $r->validate([

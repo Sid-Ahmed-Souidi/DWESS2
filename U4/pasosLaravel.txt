@@ -1,0 +1,27 @@
+
+Crear proyecto laravel
+composer create-project laravel/laravel nombre-del-proyecto
+
+Crear migraciones
+php artisan make:migration create_detalleCitas_table
+
+Crear Modelos
+php artisan make:model Coche
+
+
+Crear Sedeers
+php artisan make:seeder ServiciosS
+
+ejecutar sedeers
+php artisan db:seed --class=ServiciosS
+
+
+Crear controladores
+ php artisan make:controller CitaController
+
+
+
+
+
+
+
