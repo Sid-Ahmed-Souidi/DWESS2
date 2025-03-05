@@ -1,0 +1,22 @@
+ Creación de carpeta de proyecto                                  librerias = npm install mysql2 , npm install sequelize                                               npm install sequelize 
+ mkdir ofertas
+ cd ofertas                                               en el catch   res.status(500).send('Error:'+error);
+
+
+ Inicializar proyecto
+ npm init
+
+ Crear index.js: Fichero que se va a ejecutar cuando se
+levante el servidor
+
+ Crear script (en package.json) que lance index.js y lanzar
+script con comando
+ npm start
+ Instalar express
+ npm install express
+ Instalar dependencias
+ npm install
+
+tener esto en package.json para que funcione el npm run dev
+     "dev": "node index.js"
+
